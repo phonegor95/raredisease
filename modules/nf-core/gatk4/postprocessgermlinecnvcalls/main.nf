@@ -3,7 +3,10 @@ process GATK4_POSTPROCESSGERMLINECNVCALLS {
     label 'process_single'
 
     //Conda is not supported at the moment: https://github.com/broadinstitute/gatk/issues/7811
-    container "nf-core/gatk:4.5.0.0" //Biocontainers is missing a package
+    //container "nf-core/gatk:4.5.0.0" //Biocontainers is missing a package
+    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
+        'https://depot.galaxyproject.org/singularity/gatk4:4.6.1.0--py36hdfd78af_0':
+        'biocontainers/gatk4:4.6.1.0--py36hdfd78af_0' }"
 
     input:
     tuple val(meta), path(calls), path(model), path(ploidy)
